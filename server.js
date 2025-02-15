@@ -12,10 +12,12 @@ app.use(express.json());
 // Use the imported routes
 app.use(floralControllerRoute, floralController);
 app.use(userControllerRoute, userController);
+app.use('/users', userController);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Online Floral Delivery');
 });
+
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);

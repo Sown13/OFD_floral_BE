@@ -3,9 +3,14 @@ const express = require('express');
 const { UserInfo } = require('../database/db-config');
 const userController = express.Router();
 const userControllerRoute = "/users";
+const bcrypt = require('bcryptjs');
 
 // import middleware
 const UserInfoMiddleware = require('../middleware/UserInfoMiddleWare');
+
+userController.post('/login', async (req, res) => {
+    //
+})
 
 /** Get all users */
 userController.get('', async (req, res) => {
@@ -32,13 +37,19 @@ userController.get('/:id', async (req, res) => {
 });
 
 /** Create new user */
-userController.post('',
+userController.post('/signup',
     UserInfoMiddleware.validateRequiredFields,
     UserInfoMiddleware.validateUniqueUser,
     UserInfoMiddleware.validatePasswordStrength,
     async (req, res) => {
         try {
-            const newUser = new UserInfo(req.body);
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword  = await bcrypt.hash(req.body.password, salt);
+
+            const newUser = new UserInfo({
+                ...req.body,
+                password: hashedPassword
+            });
             await newUser.save();
             res.status(201).json(newUser);
         } catch (error) {
