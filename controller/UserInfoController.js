@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs');
 const UserInfoMiddleware = require('../middleware/UserInfoMiddleWare');
 
 userController.post('/login', async (req, res) => {
-    //
+    // test
 })
 
 /** Get all users */
