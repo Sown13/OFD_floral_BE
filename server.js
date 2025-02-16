@@ -8,6 +8,9 @@ const { floralController, floralControllerRoute } = require('./controller/Floral
 const { userController, userControllerRoute } = require('./controller/UserInfoController');
 
 app.use(express.json());
+const cors = require('cors');
+app.use(cors()); // Mặc định cho phép tất cả nguồn truy cập
+
 
 // Use the imported routes
 app.use(floralControllerRoute, floralController);
