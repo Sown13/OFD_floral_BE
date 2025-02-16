@@ -9,7 +9,7 @@ const validateRequiredFields = (req, res, next) => {
 };
 
 const validateUniqueUser = async (req, res, next) => {
-    const { email, phone } = req.body;
+    const { email, phone, username } = req.body;
 
     try {
         console.log("1");
@@ -17,6 +17,11 @@ const validateUniqueUser = async (req, res, next) => {
         if (userByEmail) {
             console.log("2");
             return res.status(400).json({ message: 'Email đã tồn tại' });
+        }
+
+        const userByUsername = await UserInfo.findOne({ username });
+        if (userByUsername) {
+            return res.status(400).json({ message: 'Username đã tồn tại' });
         }
 
         console.log("3");
