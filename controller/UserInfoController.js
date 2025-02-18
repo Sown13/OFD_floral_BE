@@ -21,13 +21,13 @@ userController.post('/login',
         const {username, password} = req.body;
         const user = await UserInfo.findOne({ username});
 
-        if(!user) return res.status(401).json({message: "Username không tồn tại."});
+        if(!user) return res.status(401).json({message: "Sai username hoặc password."});
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
         console.log("🔍 Kết quả so sánh mật khẩu:", isPasswordValid);
         
         if(!isPasswordValid) 
-            return res.status(401).json({ message: "Mật khẩu không chính xác." });
+            return res.status(401).json({ message: "Sai username hoặc password." });
 
         const accessToken = jwt.sign({username}, process.env.ACCESS_TOKEN_SECRET, {
             expiresIn: '1h'
