@@ -8,8 +8,42 @@ const floralControllerRoute = "/florals";
 /** Get all florals */
 floralController.get('', async (req, res) => {
     try {
-        const florals = await Floral.find();
-        res.json(florals);
+        // Retrieve query parameters
+        const { page = 1, limit = 10, search = '', ...filters } = req.query;
+
+        // Convert page and limit to integers
+        const pageNumber = parseInt(page);
+        const limitNumber = parseInt(limit);
+
+        // Build the filter object based on the search term and other filters
+        const filterConditions = {
+            ...filters, // Add any other filters directly from query parameters
+            ...(search && {
+                $or: [
+                    { name: { $regex: search, $options: 'i' } },
+                    { description: { $regex: search, $options: 'i' } }
+                ]
+            })
+        };
+
+        // Get the total count of items that match the filter
+        const totalItems = await Floral.countDocuments(filterConditions);
+
+        // Fetch the paginated results
+        const florals = await Floral.find(filterConditions)
+            .limit(limitNumber)
+            .skip((pageNumber - 1) * limitNumber);
+
+        // Prepare the response with metaData
+        res.json({
+            metaData: {
+                totalItems,
+                totalPages: Math.ceil(totalItems / limitNumber),
+                currentPage: pageNumber,
+                pageSize: limitNumber
+            },
+            data: florals
+        });
     } catch (error) {
         res.status(500).json({ message: 'Lỗi khi lấy danh sách hoa', error });
     }
