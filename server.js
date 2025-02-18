@@ -9,10 +9,10 @@ const { userController, userControllerRoute } = require('./controller/UserInfoCo
 
 app.use(express.json());
 
+const prefixVersion = "/api/v1";
 // Use the imported routes
-app.use(floralControllerRoute, floralController);
-app.use(userControllerRoute, userController);
-app.use('/users', userController);
+app.use(prefixVersion + floralControllerRoute, floralController);
+app.use(prefixVersion + userControllerRoute, userController);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Online Floral Delivery');

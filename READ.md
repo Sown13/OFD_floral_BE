@@ -6,6 +6,9 @@ code flow:
 5/ import controller and route from controller to server.js
 
 
+**Lưu ý: để sử dụng được api login (jwt) cần thêm file .env ở ngoài cùng (thư mục root) và thêm nội dung
+ACCESS_TOKEN_SECRET=5c0eb22094ee629fbd12edc47614aacad9723cd0bf809ceb687527826a506754c1e05c7a3abe6bf58a3d7989e23fa757807ecaeae9dfc1ae90749910b059af3e
+
 
 {
     "firstName": "hieu",
@@ -25,3 +28,5 @@ code flow:
 {
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhpZXV0ZXN0and0IiwiaWF0IjoxNzM5Njc2NjI1LCJleHAiOjE3Mzk2ODAyMjV9.9HED1xDB_mtUJZeqo82QhaB2bU6mIp7IfqHp6voSfNk"
 }
+
+
