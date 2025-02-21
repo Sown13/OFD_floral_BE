@@ -5,7 +5,11 @@ const FloralSchema = new mongoose.Schema({
     price: Number,
     category: [String],
     cover: String,
-    images: [String]
+    color: String,
+    images: [String],
+    status: String,
+    description: String,
+    quantity: Number,
 });
 
 module.exports = FloralSchema;

@@ -2,11 +2,14 @@
 const express = require('express');
 const app = express();
 const PORT = 8080;
+const cors = require("cors");
 
 // Import the routes from controller.js
 const { floralController, floralControllerRoute } = require('./controller/FloralController');
 const { userController, userControllerRoute } = require('./controller/UserInfoController');
 
+// cấu hình cors
+app.use(cors());
 app.use(express.json());
 
 const prefixVersion = "/api/v1";
@@ -22,3 +25,4 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
+
