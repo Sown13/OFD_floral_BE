@@ -12,13 +12,15 @@ const cors = require('cors');
 app.use(cors()); // Mặc định cho phép tất cả nguồn truy cập
 
 
+const prefixVersion = "/api/v1";
 // Use the imported routes
-app.use(floralControllerRoute, floralController);
-app.use(userControllerRoute, userController);
+app.use(prefixVersion + floralControllerRoute, floralController);
+app.use(prefixVersion + userControllerRoute, userController);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Online Floral Delivery');
 });
+
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
