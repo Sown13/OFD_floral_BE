@@ -5,11 +5,11 @@ const floralController = express.Router();
 const floralControllerRoute = "/florals";
 
 
-/** Get all florals */
+//** Get all florals */
 floralController.get('', async (req, res) => {
     try {
         // Retrieve query parameters
-        const { page = 1, limit = 10, search = '', ...filters } = req.query;
+        const { page = 1, limit = 10, search = '', color, status, price, ...filters } = req.query;
 
         // Convert page and limit to integers
         const pageNumber = parseInt(page);
@@ -23,7 +23,10 @@ floralController.get('', async (req, res) => {
                     { name: { $regex: search, $options: 'i' } },
                     { description: { $regex: search, $options: 'i' } }
                 ]
-            })
+            }),
+            ...(color && { color }), // Filter by color
+            ...(status && { status }), // Filter by status
+            ...(price && { price: { $lte: parseFloat(price) } }) // Filter by price (less than or equal to)
         };
 
         // Get the total count of items that match the filter
@@ -48,6 +51,7 @@ floralController.get('', async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi lấy danh sách hoa', error });
     }
 });
+
 
 /** Find floral by ID */
 floralController.get('/:id', async (req, res) => {
