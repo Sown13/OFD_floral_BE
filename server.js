@@ -6,6 +6,7 @@ const PORT = 8080;
 // Import the routes from controller.js
 const { floralController, floralControllerRoute } = require('./controller/FloralController');
 const { userController, userControllerRoute } = require('./controller/UserInfoController');
+const { categoryController, categoryControllerRoute } = require('./controller/CategoryController');
 
 app.use(express.json());
 const cors = require('cors');
@@ -16,6 +17,7 @@ const prefixVersion = "/api/v1";
 // Use the imported routes
 app.use(prefixVersion + floralControllerRoute, floralController);
 app.use(prefixVersion + userControllerRoute, userController);
+app.use(prefixVersion + categoryControllerRoute, categoryController);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Online Floral Delivery');

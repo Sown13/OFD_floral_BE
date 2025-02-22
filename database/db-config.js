@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const FloralSchema = require('../model/FloralSchema');
 const UserSchema = require('../model/UserSchema');
-const PredefineMessageSchema = require('../model/PredefineMessageSchema');
+const CategorySchema = require('../model/CategorySchema');
 
 // Connect MongoDB
 mongoose.connect('mongodb://localhost:27017/ofd-floral', {
@@ -13,18 +13,18 @@ mongoose.connect('mongodb://localhost:27017/ofd-floral', {
     .catch(err => console.error('Lỗi kết nối', err));
 
 //define collection name here
-const FloralSchemaWithCollection = new mongoose.Schema(FloralSchema, { collection: 'florals' });
-const PredefineMessageSchemaWithCollection = new mongoose.Schema(PredefineMessageSchema, { collection: 'predefineMessages' });
-const UserSchemaWithCollection = new mongoose.Schema(UserSchema, { collection: 'userInfos' });
+const FloralSchemaWithCollection = new mongoose.Schema(FloralSchema, {collection: 'florals'});
+const CategorySchemaWithCollection = new mongoose.Schema(CategorySchema, {collection: 'categories'});
+const UserSchemaWithCollection = new mongoose.Schema(UserSchema, {collection: 'userInfos'});
 
 //define model (feel like it server like a repository in java srping)
 const Floral = mongoose.model('Floral', FloralSchemaWithCollection);
-const PredefineMessage = mongoose.model('PredefineMessage', PredefineMessageSchemaWithCollection);
+const Category = mongoose.model('Category', CategorySchemaWithCollection);
 const UserInfo = mongoose.model('UserInfo', UserSchemaWithCollection);
 
 module.exports = {
     Floral,
-    PredefineMessage,
+    Category,
     UserInfo
 }
 
