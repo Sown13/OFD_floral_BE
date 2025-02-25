@@ -24,6 +24,7 @@ function authenToken(req, res, next) {
     }    
 }
 
+
 module.exports = {
     validateLoginFields,
     authenToken
