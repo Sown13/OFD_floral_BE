@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const PORT = 8080;
+const cors = require("cors");
 
 // Import the routes from controller.js
 const { floralController, floralControllerRoute } = require('./controller/FloralController');
@@ -12,7 +13,6 @@ const { cartController, cartControllerRoute } = require('./controller/CartContro
 // cấu hình cors
 app.use(cors());
 app.use(express.json());
-const cors = require('cors');
 app.use(cors()); // Mặc định cho phép tất cả nguồn truy cập
 
 
