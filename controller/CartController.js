@@ -5,13 +5,20 @@ const { UserInfo } = require('../database/db-config');
 const cartController = express.Router();
 const cartControllerRoute = "/cart";
 
-// Add floral to cart
-cartController.post('/:userId/add', async (req, res) => {
-    try {
-        const items = req.body; // Nhận danh sách sản phẩm từ body
-        const userId = req.params.userId;
 
-        const user = await UserInfo.findById(userId);
+const LoginMiddleware = require('../middleware/LoginMiddleWare');
+// Add floral to cart
+cartController.post('/add', LoginMiddleware.authenToken, async (req, res) => {
+    console.log("vào đây");
+    try {
+        // const user = await UserInfo.findById(decoded.userId).select('-password');
+        const user = req.user;
+        console.log("user -----", user)
+        const items = req.body; // Nhận danh sách sản phẩm từ body
+        const userId = user.username;
+        console.log("userId -----", userId)
+
+        // const user = await UserInfo.findById(userId);
         if (!user) return res.status(404).json({ message: 'User not found' });
 
         let cart = await Cart.findOne({ userId });
