@@ -4,6 +4,7 @@ const { Floral } = require('../database/db-config');
 const { UserInfo } = require('../database/db-config');
 const cartController = express.Router();
 const cartControllerRoute = "/cart";
+const { authenToken } = require('../middleware/LoginMiddleWare');
 
 
 const LoginMiddleware = require('../middleware/LoginMiddleWare');
@@ -50,9 +51,9 @@ cartController.post('/add', LoginMiddleware.authenToken, async (req, res) => {
 });
 
 // View cart
-cartController.get('/:userId', async (req, res) => {
+cartController.get('/', authenToken, async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.user.userId; // Use userId from the token
 
         const cart = await Cart.findOne({ userId }).populate('items.floralId');
         if (!cart) return res.status(404).json({ message: 'Cart not found' });
