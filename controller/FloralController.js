@@ -12,6 +12,7 @@ floralController.get("", async (req, res) => {
             page = 1,
             limit = 10,
             search,
+            stockStatus,
             color,
             status,
             minPrice,
@@ -24,12 +25,17 @@ floralController.get("", async (req, res) => {
         const pageNumber = parseInt(page);
         const limitNumber = parseInt(limit);
         // Ensure categories is always an array
-        const categoryArray = Array.isArray(categories) ? categories : [categories];
+        const categoryArray = Array.isArray(categories)
+            ? categories
+            : [categories];
 
         // Build price filter
         let priceFilter = {};
         if (minPrice && maxPrice) {
-            priceFilter = { $gte: parseFloat(minPrice), $lte: parseFloat(maxPrice) };
+            priceFilter = {
+                $gte: parseFloat(minPrice),
+                $lte: parseFloat(maxPrice),
+            };
         } else if (minPrice) {
             priceFilter = { $gte: parseFloat(minPrice) };
         } else if (maxPrice) {
@@ -49,7 +55,11 @@ floralController.get("", async (req, res) => {
             ...(status && { status }), // Filter by status
             ...(Object.keys(priceFilter).length > 0 && { price: priceFilter }),
             ...(categoryArray &&
-                categoryArray.length > 0 && { categories: { $in: categoryArray } }),
+                categoryArray.length > 0 && {
+                    categories: { $in: categoryArray },
+                }),
+            ...(stockStatus === "available" ? { quantity: { $gt: 0 } } : {}),
+            ...(stockStatus === "outofstock" ? { quantity: 0 } : {}),
         };
 
         // Get the total count of items that match the filter

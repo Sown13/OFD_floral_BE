@@ -29,9 +29,13 @@ userController.post('/login',
         if(!isPasswordValid) 
             return res.status(401).json({ message: "Sai username hoặc password." });
 
-        const accessToken = jwt.sign({username}, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: '1h'
-        });
+        const accessToken = jwt.sign(
+            { userId: user._id, username: user.username },
+            process.env.ACCESS_TOKEN_SECRET,
+            {
+                expiresIn: "1h",
+            }
+        );
         
         let refreshToken = user.refreshToken || randToken.generate(64);
 
