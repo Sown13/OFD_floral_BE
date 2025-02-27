@@ -2,6 +2,12 @@
 const express = require('express');
 const app = express();
 const PORT = 8080;
+const cors = require('cors');
+
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }));
 
 // Import the routes from controller.js
 const { floralController, floralControllerRoute } = require('./controller/FloralController');
