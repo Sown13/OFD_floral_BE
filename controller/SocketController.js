@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { Server } = require("socket.io");
 const axios = require("axios");
-
+const { Floral } = require("../database/db-config");
 let io;
 
 const initSocket = (server) => {
@@ -24,7 +24,7 @@ const initSocket = (server) => {
             }
 
             io.emit("receiveMessage", { sender: data.sender, text: data.text });
-
+            const flowers = await Floral.find();
             // ✅ Use Hugging Face API (Meta Llama 3.3 70B Instruct Turbo)
             try {
                 const response = await axios.post(
@@ -32,29 +32,50 @@ const initSocket = (server) => {
                     {
                         model: "mistralai/mistral-7b-instruct",
                         messages: [
-                            { role: "system", content: "You are a florist assisting customers in a flower shop. Help them choose the perfect flowers for their occasion." },
-                            { role: "user", content: data.text }
+                            {
+                                role: "system",
+                                content:
+                                    "You are a florist assisting customers in a flower shop. Help them choose the perfect flowers for their occasion.",
+                            },
+                            {
+                                role: "system",
+                                content: `Available flowers: ${JSON.stringify(
+                                    flowers
+                                )}`,
+                            },
+                            { role: "user", content: data.text },
                         ],
                         max_tokens: 100,
                     },
                     {
                         headers: {
-                            "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-                            "Content-Type": "application/json"
+                            Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                            "Content-Type": "application/json",
                         },
                     }
-                );                
+                );
                 if (response.data.choices && response.data.choices.length > 0) {
                     const aiReply = response.data.choices[0].message.content;
-                    socket.emit("receiveMessage", { sender: "AI Bot", text: aiReply });
+                    socket.emit("receiveMessage", {
+                        sender: "AI Bot",
+                        text: aiReply,
+                    });
                 } else {
                     console.error("❌ Invalid API response:", response.data);
-                    socket.emit("receiveMessage", { sender: "AI Bot", text: "AI response not available." });
+                    socket.emit("receiveMessage", {
+                        sender: "AI Bot",
+                        text: "AI response not available.",
+                    });
                 }
-                
             } catch (error) {
-                console.error("❌ Hugging Face API error:", error.response ? error.response.data : error.message);
-                socket.emit("receiveMessage", { sender: "AI Bot", text: "AI is unavailable. Try again later!" });
+                console.error(
+                    "❌ Hugging Face API error:",
+                    error.response ? error.response.data : error.message
+                );
+                socket.emit("receiveMessage", {
+                    sender: "AI Bot",
+                    text: "AI is unavailable. Try again later!",
+                });
             }
         });
 
