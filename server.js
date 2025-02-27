@@ -1,35 +1,56 @@
-//server as disparcher servlet (front controller)
-const express = require('express');
+// server.js
+const express = require("express");
 const app = express();
 const PORT = 8080;
 const cors = require("cors");
+const http = require("http");
 
-// Import the routes from controller.js
-const { floralController, floralControllerRoute } = require('./controller/FloralController');
-const { userController, userControllerRoute } = require('./controller/UserInfoController');
-const { categoryController, categoryControllerRoute } = require('./controller/CategoryController');
-const { cartController, cartControllerRoute } = require('./controller/CartController');
+// Import the routes from controllers
+const { initSocket } = require("./controller/SocketController");
+const {
+    floralController,
+    floralControllerRoute,
+} = require("./controller/FloralController");
+const {
+    userController,
+    userControllerRoute,
+} = require("./controller/UserInfoController");
+const {
+    categoryController,
+    categoryControllerRoute,
+} = require("./controller/CategoryController");
+const {
+    cartController,
+    cartControllerRoute,
+} = require("./controller/CartController");
 
-// cấu hình cors
-app.use(cors());
+// Middleware
 app.use(express.json());
-app.use(cors()); // Mặc định cho phép tất cả nguồn truy cập
-
+app.use(cors());
 
 const prefixVersion = "/api/v1";
-// Use the imported routes
 app.use(prefixVersion + floralControllerRoute, floralController);
 app.use(prefixVersion + userControllerRoute, userController);
 app.use(prefixVersion + categoryControllerRoute, categoryController);
 app.use(prefixVersion + cartControllerRoute, cartController);
 
+<<<<<<< HEAD
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Online Floral Delivery');
+=======
+// Create HTTP server
+const server = http.createServer(app);
+
+// Initialize socket.io
+initSocket(server);
+
+app.get("/", (req, res) => {
+    res.send("Welcome to the Online Floral Delivery");
+>>>>>>> 7ac9ad47e329765367d88bcacc57dc9ad4fbdadc
 });
 
-
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+// Start server
+server.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
-
