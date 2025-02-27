@@ -34,11 +34,6 @@ app.use(prefixVersion + userControllerRoute, userController);
 app.use(prefixVersion + categoryControllerRoute, categoryController);
 app.use(prefixVersion + cartControllerRoute, cartController);
 
-<<<<<<< HEAD
-
-app.get('/', (req, res) => {
-    res.send('Welcome to the Online Floral Delivery');
-=======
 // Create HTTP server
 const server = http.createServer(app);
 
@@ -47,7 +42,6 @@ initSocket(server);
 
 app.get("/", (req, res) => {
     res.send("Welcome to the Online Floral Delivery");
->>>>>>> 7ac9ad47e329765367d88bcacc57dc9ad4fbdadc
 });
 
 // Start server
